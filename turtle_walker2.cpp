@@ -1,5 +1,9 @@
 #include <rclcpp/rclcpp.hpp>
 #include <turtlesim/srv/spawn.hpp>
+#include "turtlesim/srv/teleport_absolute.hpp"
+#include "turtlesim/srv/teleport_relative.hpp"
+#include "turtlesim/msg/pose.hpp"
+
 
 using namespace std::chrono_literals;
 
@@ -16,6 +20,7 @@ public:
         request->y = 5.0;
         request->theta = 0.0;
         request->name = "Tom_XXXX";
+      
 
         while (!client_->wait_for_service(1s)) {
             if (!rclcpp::ok()) {
@@ -33,10 +38,20 @@ public:
         catch (const std::exception & e) {
             RCLCPP_ERROR(this->get_logger(), "Service call failed: %s", e.what());
         }
+        auto pose_msg = std::make_shared<turtlesim::msg::Pose>();
+        pose_msg->x = 5.0;
+        pose_msg->y = 5.0;
+        pose_msg->theta = 0.0;
+
+        // 发布初始位置消息
+        pose_publisher_->publish(*pose_msg);
+   
+   
     }
 
 private:
     rclcpp::Client<turtlesim::srv::Spawn>::SharedPtr client_;
+    rclcpp::Publisher<turtlesim::msg::Pose>::SharedPtr pose_publisher_;
 };
 
 int main(int argc, char * argv[])

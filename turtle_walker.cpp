@@ -2,23 +2,25 @@
 #include "turtlesim/srv/teleport_absolute.hpp"
 #include "turtlesim/srv/teleport_relative.hpp"
 #include "turtlesim/msg/pose.hpp"
-
-#include <sstream>
+#include "turtlesim/srv/spawn.hpp"
 #include <iostream>
 
 class TurtleFactory : public rclcpp::Node {
 public:
     TurtleFactory(const std::string& name) : Node(name) {
-        create_turtle("Jerry_XXXX"); // 使用默认构造函数创建小海龟的名称
+        // 设置参数并初始化小海龟的坐标和名字
+        this->declare_parameter("x",4.0);
+        this->declare_parameter("y",4.0);
+        this->declare_parameter("theta",0.0);
+        this->declare_parameter("turtle_name","Tom_XXXX");
+        x = this->get_parameter("x").as_double();
+        y = this->get_parameter("y").as_double();
+        theta = this->get_parameter("theta").as_double();
+        turtle_name = this->get_parameter("turtle_name").as_string();
+        client_ = this->create_client<turtlesim::srv::Spawn>("/spawn");
     }
-private:
-    std::string turtle_name_;
-    rclcpp::Client<turtlesim::srv::TeleportAbsolute>::SharedPtr client_;
 
-    void create_turtle(const std::string& name) {
-        turtle_name_ = name;
-        client_ = this->create_client<turtlesim::srv::TeleportAbsolute>("turtle1/teleport_absolute");
-        
+     void create_turtle() {
         while (!client_->wait_for_service(std::chrono::seconds(1))) {
             if (!rclcpp::ok()) {
                 return;
@@ -26,20 +28,24 @@ private:
             RCLCPP_INFO(this->get_logger(), "Waiting for service to be available...");
         }
         
-        auto request = std::make_shared<turtlesim::srv::TeleportAbsolute::Request>();
-        request->x = 5.5;
-        request->y = 5.5;
-        request->theta =0;
+        auto request = std::make_shared<turtlesim::srv::Spawn::Request>();
+        request->x = x;
+        request->y = y; // 确保设置 y 坐标
+        request->theta = theta;
+        request->name = turtle_name;
         auto future = client_->async_send_request(request);
-
-         
     }
-    
+private:
+    double x, y, theta;
+    std::string turtle_name;
+    rclcpp::Client<turtlesim::srv::Spawn>::SharedPtr client_;
 };
 
 int main(int argc, char * argv[]) {
     rclcpp::init(argc, argv);
+
     auto turtle_walker = std::make_shared<TurtleFactory>("turtle_walker");
+    turtle_walker->create_turtle(); // 调用 create_turtle 方法执行创建海龟操作
     rclcpp::spin(turtle_walker);
     rclcpp::shutdown();
     return 0;

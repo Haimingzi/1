@@ -36,7 +36,7 @@ try
 auto ts = buffer_->lookupTransform(father_frame,child_frame,tf2::TimePointZero);
    //组织并发布速度指令
 geometry_msgs::msg::Twist twist;
-twist.linear.x=0.5*sqrt(pow(ts.transform.translation.x,2) + pow(ts.transform.translation.y,2));
+twist.linear.x=0.8*sqrt(pow(ts.transform.translation.x,2) + pow(ts.transform.translation.y,2));
 twist.angular.z=1.0*atan2(ts.transform.translation.y,ts.transform.translation.x);
 
 cmd_pub_->publish(twist);

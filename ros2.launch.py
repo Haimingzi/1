@@ -3,10 +3,14 @@ from launch_ros.actions import Node
  
 
 def generate_launch_description():
-    
+    turtle_walker2 = Node(
+        package="ROS2_XXXX",
+        executable="turtle_walker2"
+    )
     turtlesim_node = Node(
         package="turtlesim",
-        executable="turtlesim_node"
+        executable="turtlesim_node",
+        parameters=[{"name":"Jerry_XXXX","x":5.5,"y":5.5,"background_g":255,"background_r":0,"background_b":0}]
     )
 
    
@@ -16,16 +20,12 @@ def generate_launch_description():
         parameters=[{"turtle_name":"Tom_XXXX"}]
     )
  
-    # controller = Node(
-    #     package="ROS2_XXXX",
-    #     executable="controller",
+    controller = Node(
+        package="ROS2_XXXX",
+        executable="controller",
          
-    # )
-    # turtle_pos_sub = Node(
-    #     package="ROS2_XXXX",
-    #     executable="turtle_pos_sub",
-         
-    # )
+    )
+ 
 
     #分别广播两只乌龟相对于world的坐标变换
 
@@ -53,10 +53,9 @@ def generate_launch_description():
 
     launch_description = LaunchDescription([
   
-        # turtle_pos_sub,
         turtlesim_node,
         turtle_walker,
-        # controller,
+        controller,
         tf_broadcaster1,
         tf_broadcaster2,
         turtle_tf_listener

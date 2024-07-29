@@ -1,65 +1,61 @@
-#include <rclcpp/rclcpp.hpp>
-#include <turtlesim/msg/pose.hpp>
-#include <tf2_ros/transform_broadcaster.h>
-#include <geometry_msgs/msg/transform_stamped.hpp>
-#include <tf2/LinearMath/Quaternion.h> // 引入具体 Quaternion 类的头文件
+#include "rclcpp/rclcpp.hpp"
+#include "tf2_ros/transform_broadcaster.h"
+#include "turtlesim/msg/pose.hpp"
+#include "geometry_msgs/msg/transform_stamped.hpp"
+#include "tf2/LinearMath/Quaternion.h"
 
-using namespace tf2; // 显式地使用 tf2 命名空间
 
 class TurtleTfBroadcaster : public rclcpp::Node
 {
 public:
-    TurtleTfBroadcaster(const std::string& name)
-    : Node(name)
-    {
-        // 创建一个 TransformBroadcaster 对象
-        tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
-
-        // 订阅每个海龟的 pose 题目
-        tom_sub_ = this->create_subscription<turtlesim::msg::Pose>(
-            "/Tom_XXXX/pose", 10, std::bind(&TurtleTfBroadcaster::handle_tom_pose, this, std::placeholders::_1));
-
-        jerry_sub_ = this->create_subscription<turtlesim::msg::Pose>(
-            "/Jerry_XXXX/pose", 10, std::bind(&TurtleTfBroadcaster::handle_jerry_pose, this, std::placeholders::_1));
+    TurtleTfBroadcaster(const std::string &name) : Node(name)
+    { 
+        this->declare_parameter("turtle","turtle1");
+        turtle=this->get_parameter("turtle").as_string();
+        // 创建一个动态广播器
+        broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
+        // 创建一个乌龟位姿订阅方
+        // pose_sub_ = this->create_subscription<turtlesim::msg::Pose>(
+        //      "/" + turtle + "/pose",10,
+        //     [this](const turtlesim::msg::Pose::SharedPtr msg) {
+        //         do_pose(*msg);
+        //     });
+        pose_sub_=this->create_subscription<turtlesim::msg::Pose>(
+            "/"+turtle+"/pose",10,std::bind(&TurtleTfBroadcaster::do_pose,this, std::placeholders::_1));
+    
     }
 
 private:
-    void handle_tom_pose(const turtlesim::msg::Pose::SharedPtr msg)
+    
+    // 回调函数中，获取乌龟位姿并生成相对关系并发布
+    void do_pose(const turtlesim::msg::Pose::SharedPtr pose)
     {
-        publish_transform("world", "Tom_XXXX", msg);
+        // 组织消息
+        geometry_msgs::msg::TransformStamped ts;
+        ts.header.stamp = this->now();
+        ts.header.frame_id = "world";
+        ts.child_frame_id = turtle;
+
+        ts.transform.translation.x = pose->x;
+        ts.transform.translation.y = pose->y;
+        ts.transform.translation.z = 0.0;
+
+        // 从欧拉角转换出四元数
+        tf2::Quaternion qtn;
+        qtn.setRPY(0, 0, pose->theta); // 将角度转换为弧度
+        ts.transform.rotation.x = qtn.x();
+        ts.transform.rotation.y = qtn.y();
+        ts.transform.rotation.z = qtn.z();
+        ts.transform.rotation.w = qtn.w();
+
+        // 发布
+        broadcaster_->sendTransform(ts);
     }
-
-    void handle_jerry_pose(const turtlesim::msg::Pose::SharedPtr msg)
-    {
-        publish_transform("world", "Jerry_XXXX", msg);
-    }
-
-    void publish_transform(const std::string& parent_frame, const std::string& child_frame, const turtlesim::msg::Pose::SharedPtr pose)
-    {
-        geometry_msgs::msg::TransformStamped transform_stamped;
-
-        transform_stamped.header.stamp = this->now();
-        transform_stamped.header.frame_id = parent_frame;
-        transform_stamped.child_frame_id = child_frame;
-
-        transform_stamped.transform.translation.x = pose->x;
-        transform_stamped.transform.translation.y = pose->y;
-        transform_stamped.transform.translation.z = 0.0;
-
-        Quaternion q;
-        q.setRPY(0, 0, pose->theta);
-        transform_stamped.transform.rotation.x = q.x();
-        transform_stamped.transform.rotation.y = q.y();
-        transform_stamped.transform.rotation.z = q.z();
-        transform_stamped.transform.rotation.w = q.w();
-
-        tf_broadcaster_->sendTransform(transform_stamped);
-    }
-
-    rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr tom_sub_;
-    rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr jerry_sub_;
-    std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
-};
+    std::string turtle;
+    std::shared_ptr<tf2_ros::TransformBroadcaster> broadcaster_;
+    rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr pose_sub_;
+    //rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr pose_sub_;
+}; 
 
 int main(int argc, char *argv[])
 {

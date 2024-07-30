@@ -35,7 +35,7 @@ public:
     
     void spinCircle() {
         const double radius = 3.0;
-        const double angle_step = 0.01; // 减小角度步长以减慢角速度
+        const double angle_step =-0.01; // 减小角度步长以减慢角速度
         rclcpp::Rate rate(100);
         while (rclcpp::ok()) {
             for (double angle = 0.0; angle < 2 * M_PI; angle += angle_step) {

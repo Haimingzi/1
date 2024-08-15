@@ -1,0 +1,4 @@
+/home/ma/Ctest/build/CMakeFiles/rebuild_cache.dir
+/home/ma/Ctest/build/CMakeFiles/edit_cache.dir
+/home/ma/Ctest/build/CMakeFiles/main2.dir
+/home/ma/Ctest/build/CMakeFiles/main.dir

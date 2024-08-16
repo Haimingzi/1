@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/ma/Ctest/build",
+  "command": "/usr/bin/c++   -isystem /usr/local/opencv3.4.16/include -isystem /usr/local/opencv3.4.16/include/opencv  -g   -o CMakeFiles/main2.dir/main2.cpp.o -c /home/ma/Ctest/main2.cpp",
+  "file": "/home/ma/Ctest/main2.cpp"
+},
+{
+  "directory": "/home/ma/Ctest/build",
+  "command": "/usr/bin/c++   -isystem /usr/local/opencv3.4.16/include -isystem /usr/local/opencv3.4.16/include/opencv  -g   -o CMakeFiles/main.dir/main.cpp.o -c /home/ma/Ctest/main.cpp",
+  "file": "/home/ma/Ctest/main.cpp"
+}
+]

@@ -43,38 +43,14 @@ endif()
 
 #walker
 add_executable(turtle_walker src/turtle_walker.cpp)
-#walker2
-add_executable(turtle_walker2 src/turtle_walker2.cpp)
 #controller
 add_executable(controller src/TurtleController.cpp)
-#pos
-add_executable(turtle_pos_sub src/TurtleController.cpp)
-#follow
-add_executable(follow_turtle src/follow_turtle.cpp)
-#tf
+#tf_broadcaster
 add_executable(tf_broadcaster src/tf_broadcaster.cpp)
-#dynamic_tf_broadcaster
-add_executable(dynamic_tf_broadcaster src/dynamic_tf_broadcaster.cpp)
-#point
-add_executable(point_tf_broadcaster src/point_tf_broadcaster.cpp)
-#static_tf_broadcaster
-add_executable(static_tf_broadcaster src/static_tf_broadcaster.cpp)
-#tf_listener1
-add_executable(demo01_tf_listener src/demo01_tf_listener.cpp)
-add_executable(demo01_msg_filter src/demo01_msg_filter.cpp)
+#turtle_tf_listener
 add_executable(turtle_tf_listener src/turtle_tf_listener.cpp)
-
 #walker
 ament_target_dependencies(turtle_walker
-  rclcpp
-  turtlesim
-  tf2
-  tf2_geometry_msgs
-  geometry_msgs
-  village_interfaces 
-)
-#walker2
-ament_target_dependencies(turtle_walker2
   rclcpp
   turtlesim
   tf2
@@ -91,26 +67,7 @@ ament_target_dependencies(controller
   geometry_msgs
   village_interfaces 
 )
-#follow
-ament_target_dependencies(follow_turtle 
-rclcpp
-turtlesim
-tf2
-tf2_geometry_msgs
-geometry_msgs
-village_interfaces 
-)
-
-#pos
-ament_target_dependencies(turtle_pos_sub
-  rclcpp
-  turtlesim
-  tf2
-  tf2_geometry_msgs
-  geometry_msgs
-  village_interfaces 
-)
-#tf
+#tf_broadcaster
 ament_target_dependencies(tf_broadcaster
   rclcpp
   turtlesim
@@ -119,56 +76,7 @@ ament_target_dependencies(tf_broadcaster
   geometry_msgs
   village_interfaces 
 )
-#static_tf_broadcaster
-ament_target_dependencies(static_tf_broadcaster
-  rclcpp
-  turtlesim
-  tf2
-  tf2_ros
-  tf2_geometry_msgs
-  geometry_msgs
-  village_interfaces 
-)
-#dynamic_tf_broadcaster
-ament_target_dependencies(dynamic_tf_broadcaster
-  rclcpp
-  turtlesim
-  tf2
-  tf2_ros
-  tf2_geometry_msgs
-  geometry_msgs
-  village_interfaces 
-)
-#point
-ament_target_dependencies(point_tf_broadcaster
-  rclcpp
-  turtlesim
-  tf2
-  tf2_ros
-  tf2_geometry_msgs
-  geometry_msgs
-  village_interfaces 
-)
-# tf_listener1
-ament_target_dependencies(demo01_tf_listener
-  rclcpp
-  turtlesim
-  tf2
-  tf2_ros
-  tf2_geometry_msgs
-  geometry_msgs
-  village_interfaces 
-)
-ament_target_dependencies(demo01_msg_filter
-  rclcpp
-  turtlesim
-  tf2
-  tf2_ros
-  tf2_geometry_msgs
-  message_filters 
-  geometry_msgs
-  village_interfaces 
-)
+#turtle_tf_listener
 ament_target_dependencies(turtle_tf_listener
   rclcpp
   turtlesim
@@ -186,52 +94,17 @@ target_include_directories(turtle_walker
   PUBLIC
   $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
 )
-#walker2
-target_include_directories(turtle_walker2
-  PUBLIC
-  $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
-)
-#follow
-target_include_directories(follow_turtle
-  PUBLIC
-  $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
-)
 #controller
 target_include_directories(controller
   PUBLIC
   $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
 )
-#tf
+#tf_broadcaster
 target_include_directories(tf_broadcaster
   PUBLIC
   $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
 )
-#static_tf_broadcaster
-target_include_directories(static_tf_broadcaster
-  PUBLIC
-  $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
-)
-
-#dynamic_tf_broadcaster
-target_include_directories(dynamic_tf_broadcaster
-  PUBLIC
-  $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
-)
-#point
-target_include_directories(point_tf_broadcaster
-  PUBLIC
-  $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
-)
-#tf_listener1
-target_include_directories(demo01_tf_listener
-  PUBLIC
-  $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
-)
-#msg_filter
-target_include_directories(demo01_msg_filter
-  PUBLIC
-  $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
-)
+#turtle_tf_listener
 target_include_directories(turtle_tf_listener
   PUBLIC
   $<BUILD_INTERFACE:${tf2_geometry_msgs_INCLUDE_DIRS}>
@@ -253,57 +126,17 @@ install(TARGETS
   turtle_walker
   DESTINATION lib/${PROJECT_NAME}
 )
-#walker2
-install(TARGETS
-  turtle_walker2
-  DESTINATION lib/${PROJECT_NAME}
-)
 #controller
 install(TARGETS
   controller
   DESTINATION lib/${PROJECT_NAME}
 )
-#follow
-install(TARGETS
-  follow_turtle
-  DESTINATION lib/${PROJECT_NAME}
-)
-#pos
-install(TARGETS
-  turtle_pos_sub
-  DESTINATION lib/${PROJECT_NAME}
-)
-#tf
+#tf_broadcaster
 install(TARGETS
   tf_broadcaster
   DESTINATION lib/${PROJECT_NAME}
 )
-#static_tf_broaddcaster
-install(TARGETS
-  static_tf_broadcaster
-  DESTINATION lib/${PROJECT_NAME}
-)
-#dynamic_tf_broaddcaster
-install(TARGETS
-  dynamic_tf_broadcaster
-  DESTINATION lib/${PROJECT_NAME}
-)
-#point
-install(TARGETS
-  point_tf_broadcaster
-  DESTINATION lib/${PROJECT_NAME}
-)
-# tf_listener1
-install(TARGETS
-  demo01_tf_listener
-  DESTINATION lib/${PROJECT_NAME}
-)
-# msg_filter
-install(TARGETS
-  demo01_msg_filter
-  DESTINATION lib/${PROJECT_NAME}
-)
-
+#turtle_tf_listener
 install(TARGETS
   turtle_tf_listener
   DESTINATION lib/${PROJECT_NAME}

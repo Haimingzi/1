@@ -1,0 +1,12 @@
+/home/ma/Ctest/1.jpg
+/home/ma/Ctest/2.jpg
+/home/ma/Ctest/3.jpg
+/home/ma/Ctest/4.jpg
+/home/ma/Ctest/5.jpg
+/home/ma/Ctest/6.jpg
+/home/ma/Ctest/7.jpg
+/home/ma/Ctest/8.jpg
+/home/ma/Ctest/9.jpg
+/home/ma/Ctest/10.jpg
+/home/ma/Ctest/11.jpg
+/home/ma/Ctest/12.jpg 

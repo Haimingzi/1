@@ -102,9 +102,7 @@ private:
                 cv::Mat rvec, tvec;
                 cv::solvePnP(object_points, image_points, camera_matrix_, dist_coeffs_, rvec, tvec);
 
-                // Calculate distance (assuming Z is the distance you want)
-                double distance = cv::norm(tvec); // Distance to the object
-                std::cout << "Distance to red lights: " << distance << " meters" << std::endl;
+                std::cout << "rvec: " << rvec << endl<<"tvec:" <<tvec<< std::endl;
 
                 // Optionally also draw the center on the image
                 cv::circle(undistorted_frame, center, 5, cv::Scalar(255, 255, 0), -1);
